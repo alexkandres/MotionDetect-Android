@@ -1,10 +1,12 @@
 package com.example.android.motiondetect;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -45,10 +47,15 @@ public class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.MyViewHold
 
     //inner class start
     public static class MyViewHolder extends RecyclerView.ViewHolder{
+        CardView cardView;
+        ImageView imageView;
         TextView listItemNumberView;
 
         public MyViewHolder(View itemView){
             super(itemView);
+            cardView = (CardView) itemView.findViewById(R.id.cardViewItem);
+            imageView = (ImageView) itemView.findViewById(R.id.imageViewItem);
+            imageView.setImageResource(R.mipmap.camera);
             listItemNumberView = (TextView) itemView.findViewById(R.id.camera_item_number);
         }
 

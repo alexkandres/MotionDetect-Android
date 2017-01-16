@@ -1,15 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardViewItem"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp">
-    <TextView
-        android:id="@+id/camera_item_number"
-        style="@style/TextAppearance.AppCompat.Title"
-        android:textSize="30sp"
-        android:fontFamily="monospace"
-        android:layout_gravity="center|start"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-</FrameLayout>
+    app:cardUseCompatPadding="true">
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+        <ImageView
+            android:id="@+id/imageViewItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="16dp"/>
+        <TextView
+            android:id="@+id/camera_item_number"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:textSize="30sp"
+            android:fontFamily="monospace"
+            android:layout_gravity="center|start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/imageViewItem"/>
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>
