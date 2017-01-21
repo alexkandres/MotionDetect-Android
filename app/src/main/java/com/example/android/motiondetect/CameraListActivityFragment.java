@@ -1,7 +1,7 @@
 package com.example.android.motiondetect;
 
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,7 +16,7 @@ public class CameraListActivityFragment extends Fragment {
     private static final int NUM_LIST_ITEMS = 100;
     private CameraAdapter mAdapter;
     private RecyclerView mNumbersList;
-
+    private String[] data = {"Camera 1", "Camera 2", "Camera 3", "Camera 4", "Camera 5", "Camera 6"};
     public CameraListActivityFragment() {
     }
 
@@ -32,7 +32,7 @@ public class CameraListActivityFragment extends Fragment {
         //set manager to recyclerview
         mNumbersList.setLayoutManager(layoutManager);
         //instantiate adapter with data
-        mAdapter = new CameraAdapter(NUM_LIST_ITEMS);
+        mAdapter = new CameraAdapter(data);
         mNumbersList.setAdapter(mAdapter);
         return view;
     }

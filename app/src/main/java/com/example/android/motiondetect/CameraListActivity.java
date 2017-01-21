@@ -1,5 +1,7 @@
 package com.example.android.motiondetect;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -8,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 public class CameraListActivity extends AppCompatActivity {
 
@@ -22,6 +25,26 @@ public class CameraListActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(CameraListActivity.this);
+                builder.setView(R.layout.add_camera_dialog);
+                builder.setTitle(R.string.dialog_title);
+
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(CameraListActivity.this, "Added to list", Toast.LENGTH_SHORT).show();
+                    }
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(CameraListActivity.this, "Cancel Clicked", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }

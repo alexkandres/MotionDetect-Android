@@ -15,10 +15,10 @@ import android.widget.TextView;
 
 public class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.MyViewHolder>{
     private static final String TAG = CameraAdapter.class.getSimpleName();
-    private int mNumberItems;
+    private String[] mNumberItems;
 
     //data to be sent in
-    public CameraAdapter(int numberOfItems){
+    public CameraAdapter(String[] numberOfItems){
         mNumberItems = numberOfItems;
     }
 
@@ -35,18 +35,19 @@ public class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.MyViewHold
         return myViewHolder;
     }
 
+    //set text in textview to new MyViewHolder created
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        holder.bind(position);
+        holder.listItemNumberView.setText(mNumberItems[position]);
     }
 
     @Override
     public int getItemCount() {
-        return mNumberItems;
+        return mNumberItems.length;
     }
 
     //inner class start
-    public static class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder{
         CardView cardView;
         ImageView imageView;
         TextView listItemNumberView;
@@ -57,10 +58,6 @@ public class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.MyViewHold
             imageView = (ImageView) itemView.findViewById(R.id.imageViewItem);
             imageView.setImageResource(R.mipmap.camera);
             listItemNumberView = (TextView) itemView.findViewById(R.id.camera_item_number);
-        }
-
-        public void bind(int listIndex) {
-            listItemNumberView.setText(String.valueOf(listIndex));
         }
 
     }//end of inner class
