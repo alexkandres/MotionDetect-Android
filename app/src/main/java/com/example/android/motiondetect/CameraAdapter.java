@@ -9,16 +9,18 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 /**
  * Created by alex on 1/14/2017.
  */
 
 public class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.MyViewHolder>{
     private static final String TAG = CameraAdapter.class.getSimpleName();
-    private String[] mNumberItems;
+    private ArrayList<String> mNumberItems;
 
     //data to be sent in
-    public CameraAdapter(String[] numberOfItems){
+    public CameraAdapter(ArrayList<String> numberOfItems){
         mNumberItems = numberOfItems;
     }
 
@@ -38,12 +40,12 @@ public class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.MyViewHold
     //set text in textview to new MyViewHolder created
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        holder.listItemNumberView.setText(mNumberItems[position]);
+        holder.listItemNumberView.setText(mNumberItems.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return mNumberItems.length;
+        return mNumberItems.size();
     }
 
     //inner class start
