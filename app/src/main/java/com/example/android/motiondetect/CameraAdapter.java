@@ -18,9 +18,11 @@ import java.util.ArrayList;
 public class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.MyViewHolder>{
     private static final String TAG = CameraAdapter.class.getSimpleName();
     private ArrayList<String> mNumberItems;
+    private ListItemClickListener mOnClickListener;
 
     //data to be sent in
-    public CameraAdapter(ArrayList<String> numberOfItems){
+    public CameraAdapter(ArrayList<String> numberOfItems, ListItemClickListener listItemClickListener){
+        mOnClickListener = listItemClickListener;
         mNumberItems = numberOfItems;
     }
 
@@ -48,8 +50,11 @@ public class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.MyViewHold
         return mNumberItems.size();
     }
 
+    public interface ListItemClickListener{
+        void onListItemClicked(int indexClicked);
+    }
     //inner class start
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         CardView cardView;
         ImageView imageView;
         TextView listItemNumberView;
@@ -60,7 +65,13 @@ public class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.MyViewHold
             imageView = (ImageView) itemView.findViewById(R.id.imageViewItem);
             imageView.setImageResource(R.mipmap.camera);
             listItemNumberView = (TextView) itemView.findViewById(R.id.camera_item_number);
+            itemView.setOnClickListener(this);
         }
 
+        @Override
+        public void onClick(View view) {
+            int position = getAdapterPosition();
+            mOnClickListener.onListItemClicked(position);
+        }
     }//end of inner class
 }

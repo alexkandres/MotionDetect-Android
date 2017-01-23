@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,11 +15,12 @@ import java.util.Arrays;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class CameraListActivityFragment extends Fragment {
+public class CameraListActivityFragment extends Fragment implements CameraAdapter.ListItemClickListener{
 
     private static final int NUM_LIST_ITEMS = 100;
     public static CameraAdapter mAdapter;
     private RecyclerView mNumbersList;
+    Toast mToast;
 
     //may need to change to non-static variable
     //private String[] data = {"Camera 1", "Camera 2", "Camera 3", "Camera 4", "Camera 5", "Camera 6"};
@@ -44,8 +46,18 @@ public class CameraListActivityFragment extends Fragment {
         mNumbersList.setLayoutManager(layoutManager);
 
         //instantiate adapter with data
-        mAdapter = new CameraAdapter(cameraNameList);
+        mAdapter = new CameraAdapter(cameraNameList, this);
         mNumbersList.setAdapter(mAdapter);
         return view;
+    }
+
+    @Override
+    public void onListItemClicked(int indexClicked) {
+        if(mToast != null){
+            mToast.cancel();
+        }
+        String s = "Item # " + indexClicked + " clicked";
+        mToast = Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT);
+        mToast.show();
     }
 }
