@@ -1,5 +1,6 @@
 package com.example.android.motiondetect;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -56,8 +57,11 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
         if(mToast != null){
             mToast.cancel();
         }
-        String s = "Item # " + indexClicked + " clicked";
-        mToast = Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT);
-        mToast.show();
+        Intent intent = new Intent(getActivity(), LiveFeedActivity.class);
+        intent.putExtra("Camera Name", indexClicked);
+        startActivity(intent);
+//        String s = "Item # " + indexClicked + " clicked";
+//        mToast = Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT);
+//        mToast.show();
     }
 }
