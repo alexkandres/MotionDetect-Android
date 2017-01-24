@@ -57,7 +57,7 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
         if(mToast != null){
             mToast.cancel();
         }
-        Intent intent = new Intent(getActivity(), LiveFeedActivity.class);
+        Intent intent = new Intent(getActivity(), LiveActivityMainActivity.class);
         intent.putExtra("Camera Name", indexClicked);
         startActivity(intent);
 //        String s = "Item # " + indexClicked + " clicked";
