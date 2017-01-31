@@ -1,20 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <EditTextPreference
-        android:key="key1"
-        android:title="Email"
-        android:inputType="text"
-        android:maxLines="1"
-        android:defaultValue=""
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <!--Heading title-->
+    <PreferenceCategory
+        android:title="@string/notification_settings"
+        android:key="notification_category_key">
 
-    <Preference
-        android:key="datePicker"
-        android:title="Date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        <EditTextPreference
+            android:key="key1"
+            android:title="Email"
+            android:inputType="text"
+            android:maxLines="1"
+            android:defaultValue=""
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
+        <Preference
+            android:key="datePicker"
+            android:title="Date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <Preference
+            android:key="timePicker"
+            android:title="Time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </PreferenceCategory>
 
 </PreferenceScreen>
