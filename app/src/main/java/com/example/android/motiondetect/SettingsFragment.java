@@ -4,7 +4,6 @@ import android.app.DialogFragment;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.widget.Toast;
 
 public class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener, Preference.OnPreferenceClickListener {
 
@@ -27,6 +26,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object o) {
+        //TODO , may have to get time from date and time pickers here via there respective listeners
         return false;
     }
 
@@ -59,7 +59,8 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                 newDialogFragment.show(getFragmentManager(), "DATE PICKER");
                 break;
             case "timePicker":
-                Toast.makeText(getActivity(), "Time Picker", Toast.LENGTH_SHORT).show();
+                DialogFragment timeDialogFragment = new TimePickerFragment();
+                timeDialogFragment.show(getFragmentManager(), "Time Picker");
         }
 //        if(key.equalsIgnoreCase("datePicker")){
 //            DialogFragment newDialogFragment = new DatePickerFragment();
