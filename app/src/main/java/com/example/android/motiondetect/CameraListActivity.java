@@ -2,6 +2,7 @@ package com.example.android.motiondetect;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -72,6 +73,10 @@ public class CameraListActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+//            DialogFragment newDialogFragment = new DatePickerFragment();
+//            newDialogFragment.show(getSupportFragmentManager(), "DATE PICKER");
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
             return true;
         }
 
