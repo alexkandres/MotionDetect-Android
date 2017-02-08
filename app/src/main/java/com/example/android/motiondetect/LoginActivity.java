@@ -13,13 +13,18 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A login screen that offers login via email/password.
@@ -70,6 +75,10 @@ public class LoginActivity extends AppCompatActivity {
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!validCredentials()){
+                    Toast.makeText(LoginActivity.this, "Not valid credentials", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 loginUser(mEmailView.getText().toString(), mPasswordView.getText().toString());
             }
         });
@@ -86,7 +95,17 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    private void loginUser(String email, String password){
+    //check email and password
+    private boolean validCredentials(){
+        String email = mEmailView.getText().toString().trim();
+        String password = mPasswordView.getText().toString().trim();
+
+        if(email.isEmpty() | password.isEmpty())
+            return false;
+
+        return true;
+    }
+    private void loginUser(final String email, final String password){
 
         //This queue should be made once
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -95,11 +114,13 @@ public class LoginActivity extends AppCompatActivity {
         //show dialog
         showDialog();
 
-        String url = "http://api.openweathermap.org/data/2.5/forecast/daily?q=94043&mode=json&units=metric&cnt=7&APPID=2416aeb32b3e3d8360593abf67e88ddc";
-        StringRequest strReq = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+//        String url = "http://api.openweathermap.org/data/2.5/forecast/daily?q=94043&mode=json&units=metric&cnt=7&APPID=2416aeb32b3e3d8360593abf67e88ddc";
+        String url = "http://ec2-54-242-89-175.compute-1.amazonaws.com:8000/api/login/";
+        StringRequest strReq = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 hideDialog();
+                Toast.makeText(LoginActivity.this, "Login Success!!", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(LoginActivity.this, CameraListActivity.class);
                 startActivity(intent);
             }
@@ -112,7 +133,15 @@ public class LoginActivity extends AppCompatActivity {
                     Log.i("Error.Response", error.getMessage());
                 }
             }
-        );
+        ){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("email", email);
+                params.put("password", password);
+                return params;
+            }
+        };
         queue.add(strReq);
     }
 
