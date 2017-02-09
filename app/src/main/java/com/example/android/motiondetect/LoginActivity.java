@@ -23,6 +23,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -120,7 +123,19 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 hideDialog();
-                Toast.makeText(LoginActivity.this, "Login Success!!", Toast.LENGTH_SHORT).show();
+                JSONObject reader;
+
+                //TODO Token needs be accessible everywhere
+                String token ="";
+                try {
+                    reader = new JSONObject(response);
+                    token = reader.getString("token");
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                Toast.makeText(LoginActivity.this, "Login Success!! Tok = " + token, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(LoginActivity.this, CameraListActivity.class);
                 startActivity(intent);
             }
