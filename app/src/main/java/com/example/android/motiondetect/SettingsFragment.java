@@ -1,5 +1,6 @@
 package com.example.android.motiondetect;
 
+import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -55,10 +56,17 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         String key = preference.getKey();
         switch(key){
             case "datePicker":
-                DialogFragment newDialogFragment = new DatePickerFragment();
-                newDialogFragment.show(getFragmentManager(), "DATE PICKER");
+                //TODO Remove Dialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setView(R.layout.day_notification_dialog);
+                builder.setTitle("Days");
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+//                DialogFragment newDialogFragment = new DatePickerFragment();
+//                newDialogFragment.show(getFragmentManager(), "DATE PICKER");
                 break;
             case "timePicker":
+                //TODO Remove time picker, this will go into activity instead of dialog
                 DialogFragment timeDialogFragment = new TimePickerFragment();
                 timeDialogFragment.show(getFragmentManager(), "Time Picker");
         }

@@ -82,7 +82,10 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, "Not valid credentials", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                loginUser(mEmailView.getText().toString(), mPasswordView.getText().toString());
+                //TODO Remove auto login
+                Intent intent = new Intent(LoginActivity.this, CameraListActivity.class);
+                startActivity(intent);
+//                loginUser(mEmailView.getText().toString(), mPasswordView.getText().toString());
             }
         });
 
