@@ -46,7 +46,7 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
         //set manager to recyclerview
         mNumbersList.setLayoutManager(layoutManager);
 
-        //instantiate adapter with data
+        //instantiate adapter with data and both click listeners below
         mAdapter = new CameraAdapter(cameraNameList, this, this);
         mNumbersList.setAdapter(mAdapter);
         return view;
@@ -60,9 +60,6 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
         Intent intent = new Intent(getActivity(), LiveActivityMainActivity.class);
         intent.putExtra("Camera Name", indexClicked);
         startActivity(intent);
-//        String s = "Item # " + indexClicked + " clicked";
-//        mToast = Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT);
-//        mToast.show();
     }
 
     @Override
@@ -70,6 +67,5 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
         Intent intent = new Intent(getActivity(), NotificationActivity.class);
         intent.putExtra("Camera Name", pos);
         startActivity(intent);
-
     }
 }
