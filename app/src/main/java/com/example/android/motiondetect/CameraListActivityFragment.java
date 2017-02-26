@@ -16,7 +16,7 @@ import java.util.Arrays;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class CameraListActivityFragment extends Fragment implements CameraAdapter.ListItemClickListener{
+public class CameraListActivityFragment extends Fragment implements CameraAdapter.ListItemClickListener, CameraAdapter.OnLongClickListener{
 
     private static final int NUM_LIST_ITEMS = 100;
     public static CameraAdapter mAdapter;
@@ -47,7 +47,7 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
         mNumbersList.setLayoutManager(layoutManager);
 
         //instantiate adapter with data
-        mAdapter = new CameraAdapter(cameraNameList, this);
+        mAdapter = new CameraAdapter(cameraNameList, this, this);
         mNumbersList.setAdapter(mAdapter);
         return view;
     }
@@ -63,5 +63,13 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
 //        String s = "Item # " + indexClicked + " clicked";
 //        mToast = Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT);
 //        mToast.show();
+    }
+
+    @Override
+    public void onItemLongClicked(int pos) {
+        Intent intent = new Intent(getActivity(), NotificationActivity.class);
+        intent.putExtra("Camera Name", pos);
+        startActivity(intent);
+
     }
 }

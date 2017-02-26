@@ -19,9 +19,11 @@ public class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.MyViewHold
     private static final String TAG = CameraAdapter.class.getSimpleName();
     private ArrayList<String> mNumberItems;
     private ListItemClickListener mOnClickListener;
+    private OnLongClickListener onLongClickListener; //Reference CameraAdapter.OnLongClickListener
 
     //data to be sent in
-    public CameraAdapter(ArrayList<String> numberOfItems, ListItemClickListener listItemClickListener){
+    public CameraAdapter(ArrayList<String> numberOfItems, ListItemClickListener listItemClickListener, OnLongClickListener onLongClickListener){
+        this.onLongClickListener = onLongClickListener;
         mOnClickListener = listItemClickListener;
         mNumberItems = numberOfItems;
     }
@@ -53,8 +55,12 @@ public class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.MyViewHold
     public interface ListItemClickListener{
         void onListItemClicked(int indexClicked);
     }
+
+    public interface OnLongClickListener{
+        void onItemLongClicked(int pos);
+    }
     //inner class start
-    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
         CardView cardView;
         ImageView imageView;
         TextView listItemNumberView;
@@ -66,12 +72,20 @@ public class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.MyViewHold
             imageView.setImageResource(R.mipmap.camera);
             listItemNumberView = (TextView) itemView.findViewById(R.id.camera_item_number);
             itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
             mOnClickListener.onListItemClicked(position);
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            int pos = getAdapterPosition();
+            onLongClickListener.onItemLongClicked(pos);
+            return true;
         }
     }//end of inner class
 }
