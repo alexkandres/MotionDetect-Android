@@ -7,9 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import java.sql.Time;
 import java.text.SimpleDateFormat;
@@ -21,6 +21,14 @@ public class NotificationActivity extends AppCompatActivity {
     private TextView toTime;
     private Button cancelButton;
     private Button saveButton;
+    private boolean days[] = new boolean[7];
+    private CheckBox checkBox1;
+    private CheckBox checkBox2;
+    private CheckBox checkBox3;
+    private CheckBox checkBox4;
+    private CheckBox checkBox5;
+    private CheckBox checkBox6;
+    private CheckBox checkBox7;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +91,6 @@ public class NotificationActivity extends AppCompatActivity {
                 timePickerDialog.show();
             }
         });
-
         //cancel button
         cancelButton = (Button) findViewById(R.id.cancel_button);
         cancelButton.setOnClickListener(new View.OnClickListener() {
@@ -95,6 +102,7 @@ public class NotificationActivity extends AppCompatActivity {
             }
         });
 
+        //save button listener
         saveButton = (Button) findViewById(R.id.save_button);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,10 +111,34 @@ public class NotificationActivity extends AppCompatActivity {
 
                 //send from and to time
                 //set key so calling activity may retreive the data
-                intent.putExtra("notification_key", fromTime.getText().toString() + toTime.getText().toString());
+                intent.putExtra("time_key", fromTime.getText().toString() + toTime.getText().toString());
+
+                //save the days to be notified
+                checkDays();
+                intent.putExtra("days_key", days);
+
                 setResult(RESULT_OK, intent);
                 finish();
             }
         });
+    }
+
+    private void checkDays(){
+
+        checkBox1 = (CheckBox) findViewById(R.id.mon_checkbox);
+        checkBox2 = (CheckBox) findViewById(R.id.tue_checkbox);
+        checkBox3 = (CheckBox) findViewById(R.id.wed_checkbox);
+        checkBox4 = (CheckBox) findViewById(R.id.thu_checkbox);
+        checkBox5 = (CheckBox) findViewById(R.id.fri_checkbox);
+        checkBox6 = (CheckBox) findViewById(R.id.sat_checkbox);
+        checkBox7 = (CheckBox) findViewById(R.id.sun_checkbox);
+
+        days[0] = checkBox1.isChecked();
+        days[1] = checkBox2.isChecked();
+        days[2] = checkBox3.isChecked();
+        days[3] = checkBox4.isChecked();
+        days[4] = checkBox5.isChecked();
+        days[5] = checkBox6.isChecked();
+        days[6] = checkBox7.isChecked();
     }
 }

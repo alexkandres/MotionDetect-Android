@@ -81,9 +81,10 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
 
             if(resultCode == Activity.RESULT_OK){
                 //TODO Reset adapter to RecyclerView can have correct data
-                //check status ok/cancel
-                String time = data.getStringExtra("notification_key");
-                Toast.makeText(getActivity(), time, Toast.LENGTH_LONG).show();
+                //get values from keys
+                String time = data.getStringExtra("time_key");
+                boolean days[] = data.getBooleanArrayExtra("days_key");
+                Toast.makeText(getActivity(), Arrays.toString(days), Toast.LENGTH_LONG).show();
             }
             else if(resultCode == Activity.RESULT_CANCELED){
                 Toast.makeText(getActivity(), "No notification change", Toast.LENGTH_LONG).show();
