@@ -1,5 +1,6 @@
 package com.example.android.motiondetect;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -62,10 +63,31 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
         startActivity(intent);
     }
 
+    private int requestCode = 1;
     @Override
     public void onItemLongClicked(int pos) {
         Intent intent = new Intent(getActivity(), NotificationActivity.class);
         intent.putExtra("Camera Name", pos);
-        startActivity(intent);
+        startActivityForResult(intent, requestCode);
+    }
+
+
+    //will be called after NotificationActivity finishes
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //check wich activity for result called
+        if(requestCode == this.requestCode){
+
+            if(resultCode == Activity.RESULT_OK){
+                //TODO Reset adapter to RecyclerView can have correct data
+                //check status ok/cancel
+                String time = data.getStringExtra("notification_key");
+                Toast.makeText(getActivity(), time, Toast.LENGTH_LONG).show();
+            }
+            else if(resultCode == Activity.RESULT_CANCELED){
+                Toast.makeText(getActivity(), "No notification change", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 }
