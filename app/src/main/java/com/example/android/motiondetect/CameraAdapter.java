@@ -64,6 +64,9 @@ public class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.MyViewHold
         CardView cardView;
         ImageView imageView;
         TextView listItemNumberView;
+        TextView fromTextView;
+        TextView toTextView;
+        TextView daysTextView;
 
         public MyViewHolder(View itemView){
             super(itemView);
@@ -71,6 +74,11 @@ public class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.MyViewHold
             imageView = (ImageView) itemView.findViewById(R.id.imageViewItem);
             imageView.setImageResource(R.mipmap.camera);
             listItemNumberView = (TextView) itemView.findViewById(R.id.camera_item_number);
+
+            //TODO set notification time and days from get request
+            fromTextView = (TextView) itemView.findViewById(R.id.from_textview);
+            toTextView = (TextView) itemView.findViewById(R.id.to_textview);
+            daysTextView = (TextView) itemView.findViewById(R.id.days_textview);
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
         }

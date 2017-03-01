@@ -27,6 +27,27 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/imageViewItem"/>
+        <TextView
+            android:id="@+id/from_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="5:00PM - "
+            android:layout_below="@+id/imageViewItem"
+            android:layout_alignParentLeft="true"/>
+        <TextView
+            android:id="@+id/to_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="12:00AM"
+            android:layout_below="@+id/imageViewItem"
+            android:layout_toRightOf="@+id/from_textview"/>
+        <TextView
+            android:id="@+id/days_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mon, Tue, Wed, Thu, Fri, Sat, Sun"
+            android:layout_below="@+id/from_textview"
+            android:layout_alignParentLeft="true"/>
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>
