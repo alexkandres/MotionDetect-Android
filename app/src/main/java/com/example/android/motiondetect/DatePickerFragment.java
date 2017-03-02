@@ -36,6 +36,5 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 
     @Override
     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-        //TODO , Do something with the date chosen by the user
     }
 }

@@ -21,7 +21,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,12 +37,8 @@ public class LoginActivity extends AppCompatActivity {
      * A dummy authentication store containing known user names and passwords.
      * TODO: remove after connecting to a real authentication system.
      */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
+    public static String token;
+
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -85,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
                 //TODO Remove auto login
                 Intent intent = new Intent(LoginActivity.this, CameraListActivity.class);
                 startActivity(intent);
-//                loginUser(mEmailView.getText().toString(), mPasswordView.getText().toString());
+                loginUser(mEmailView.getText().toString(), mPasswordView.getText().toString());
             }
         });
 
@@ -114,8 +109,8 @@ public class LoginActivity extends AppCompatActivity {
     private void loginUser(final String email, final String password){
 
         //This queue should be made once
-        RequestQueue queue = Volley.newRequestQueue(this);
-
+//        RequestQueue queue = Volley.newRequestQueue(this);
+        RequestQueue requestQueue = MySingleton.getInstance(getApplicationContext()).getRequestQueue();
         progressDialog.setMessage("Logging in ...");
         //show dialog
         showDialog();
@@ -129,10 +124,10 @@ public class LoginActivity extends AppCompatActivity {
                 JSONObject reader;
 
                 //TODO Token needs be accessible everywhere
-                String token ="";
+//                String token ="";
                 try {
                     reader = new JSONObject(response);
-                    token = reader.getString("token");
+                    token = "jwt" + reader.getString("token");
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -160,7 +155,7 @@ public class LoginActivity extends AppCompatActivity {
                 return params;
             }
         };
-        queue.add(strReq);
+        MySingleton.getInstance(getApplicationContext()).addToRequestQueue(strReq);
     }
 
     private void showDialog() {
@@ -171,16 +166,6 @@ public class LoginActivity extends AppCompatActivity {
     private void hideDialog() {
         if (progressDialog.isShowing())
             progressDialog.dismiss();
-    }
-
-    private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
-        return email.contains("@");
-    }
-
-    private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-        return password.length() > 4;
     }
 
 }

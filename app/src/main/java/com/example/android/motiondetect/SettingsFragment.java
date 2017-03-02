@@ -27,7 +27,6 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object o) {
-        //TODO , may have to get time from date and time pickers here via there respective listeners
         return false;
     }
 

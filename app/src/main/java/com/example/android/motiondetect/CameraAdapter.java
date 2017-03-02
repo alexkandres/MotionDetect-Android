@@ -44,7 +44,16 @@ public class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.MyViewHold
     //set text in textview to new MyViewHolder created
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
+
+        //TODO parse the cameras data (Name, Time, Days)
+        //Ex camera data "Camera 1, 5:00PM - 12:00AM, 1111111; Camera 2, 5:00PM - 12:00AM, 1111110"
+
+        //display Name in listItemNumberView textview
         holder.listItemNumberView.setText(mNumberItems.get(position));
+
+        //TODO display Time in timetextview
+
+        //TODO display Day in daytextview
     }
 
     @Override

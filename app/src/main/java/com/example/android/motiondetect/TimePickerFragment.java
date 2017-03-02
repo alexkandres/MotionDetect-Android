@@ -36,6 +36,5 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
 
     @Override
     public void onTimeSet(TimePicker timePicker, int i, int i1) {
-        //TODO do something after the time is set
     }
 }
