@@ -125,7 +125,7 @@ public class LoginActivity extends AppCompatActivity {
 //                String token ="";
                 try {
                     reader = new JSONObject(response);
-                    token = "jwt" + reader.getString("token");
+                    token = "jwt " + reader.getString("token");
 
                 } catch (JSONException e) {
                     e.printStackTrace();

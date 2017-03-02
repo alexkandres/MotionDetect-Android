@@ -59,11 +59,7 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
         //set manager to recyclerview
         mNumbersList.setLayoutManager(layoutManager);
 
-        //TODO query cameras from this user
-        cameraNameList.add("camera 11");
-        cameraNameList.add("hi");
-
-//        getCamerasRequest();
+        getCamerasRequest();
 //        cameraNameList = new ArrayList<>(Arrays.asList("Camera 1", "Camera 2"));
 
         //instantiate adapter with data and both click listeners below
@@ -74,7 +70,6 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
 
     private void getCamerasRequest(){
 
-        Toast.makeText(getActivity(), "get cmera req", Toast.LENGTH_SHORT).show();
         String url = "http://ec2-54-242-89-175.compute-1.amazonaws.com:8000/api/camera/";
         StringRequest strReq = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
@@ -91,12 +86,11 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
 //                    },
                     //put each array
 
-//                    for(int i = 0; i < reader.length(); i++){
-                        JSONObject jsonObject = reader.getJSONObject(0);
+                    for(int i = 0; i < reader.length(); i++){
+                        JSONObject jsonObject = reader.getJSONObject(i);
                         String cameraName = jsonObject.getString("name");
                         cameraNameList.add(cameraName);
-                        Toast.makeText(getActivity(), cameraName, Toast.LENGTH_LONG).show();
-//                    }
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -109,7 +103,7 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
                     @Override
                     public void onErrorResponse(VolleyError error) {
 //                        hideDialog();
-//                        Log.i("Error.Response", error.getMessage());
+                        Log.i("Error.Response", "Ahhhh");
                     }
                 }
         ){
