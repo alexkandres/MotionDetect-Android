@@ -78,8 +78,6 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
                 //TODO Remove auto login
-                Intent intent = new Intent(LoginActivity.this, CameraListActivity.class);
-                startActivity(intent);
                 loginUser(mEmailView.getText().toString(), mPasswordView.getText().toString());
             }
         });

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,8 +37,7 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
     Toast mToast;
 
     //may need to change to non-static variable
-    //private String[] data = {"Camera 1", "Camera 2", "Camera 3", "Camera 4", "Camera 5", "Camera 6"};
-    public static ArrayList<String> cameraNameList;
+    public static ArrayList<String> cameraNameList = new ArrayList<>();
 
     //constructor
     public CameraListActivityFragment() {
@@ -46,6 +46,7 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.i("CameraListActivityFra", "no goood");
         //inflate view
         View view = inflater.inflate(R.layout.fragment_camera_list, container, false);
 
@@ -59,7 +60,10 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
         mNumbersList.setLayoutManager(layoutManager);
 
         //TODO query cameras from this user
-        cameraNameList = getCamerasRequest();
+        cameraNameList.add("camera 11");
+        cameraNameList.add("hi");
+
+//        getCamerasRequest();
 //        cameraNameList = new ArrayList<>(Arrays.asList("Camera 1", "Camera 2"));
 
         //instantiate adapter with data and both click listeners below
@@ -68,22 +72,31 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
         return view;
     }
 
-    private ArrayList<String> getCamerasRequest(){
+    private void getCamerasRequest(){
 
-        ArrayList<String> stringArrayList = new ArrayList<>(Arrays.asList("Camera 1", "Camera 2"));
         Toast.makeText(getActivity(), "get cmera req", Toast.LENGTH_SHORT).show();
-//        RequestQueue queue = Volley.newRequestQueue(getActivity());
         String url = "http://ec2-54-242-89-175.compute-1.amazonaws.com:8000/api/camera/";
         StringRequest strReq = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 JSONArray reader;
-
                 try {
                     reader = new JSONArray(response);
-                    JSONObject jsonObject = reader.getJSONObject(0);
-                    String cameraName = jsonObject.getString("name");
-                    Toast.makeText(getActivity(), cameraName, Toast.LENGTH_LONG).show();
+//                    {
+//                        "cid": 4,
+//                            "name": "hello",
+//                            "address": "hello",
+//                            "created_at": "2017-02-23T21:36:28Z",
+//                            "is_active": true
+//                    },
+                    //put each array
+
+//                    for(int i = 0; i < reader.length(); i++){
+                        JSONObject jsonObject = reader.getJSONObject(0);
+                        String cameraName = jsonObject.getString("name");
+                        cameraNameList.add(cameraName);
+                        Toast.makeText(getActivity(), cameraName, Toast.LENGTH_LONG).show();
+//                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -108,55 +121,6 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
             }
         };
         MySingleton.getInstance(getActivity().getApplicationContext()).addToRequestQueue(strReq);
-        return stringArrayList;
-
-/*
-        RequestQueue queue = Volley.newRequestQueue(this);
-
-        progressDialog.setMessage("Logging in ...");
-        //show dialog
-        showDialog();
-
-//        String url = "http://api.openweathermap.org/data/2.5/forecast/daily?q=94043&mode=json&units=metric&cnt=7&APPID=2416aeb32b3e3d8360593abf67e88ddc";
-        String url = "http://ec2-54-242-89-175.compute-1.amazonaws.com:8000/api/login/";
-        StringRequest strReq = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                hideDialog();
-                JSONObject reader;
-
-                //TODO Token needs be accessible everywhere
-                try {
-                    reader = new JSONObject(response);
-                    token = reader.getString("token");
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                Toast.makeText(LoginActivity.this, "Login Success!! Tok = " + token, Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(LoginActivity.this, CameraListActivity.class);
-                startActivity(intent);
-            }
-        },
-                new Response.ErrorListener(){
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        hideDialog();
-                        Log.i("Error.Response", error.getMessage());
-                    }
-                }
-        ){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("email", email);
-                params.put("password", password);
-                return params;
-            }
-        };
-        queue.add(strReq);*/
     }
     @Override
     public void onListItemClicked(int indexClicked) {
