@@ -38,6 +38,7 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
 
     //may need to change to non-static variable
     public static ArrayList<String> cameraNameList = new ArrayList<>();
+    public static ArrayList<String> urlList = new ArrayList<>();
 
     //constructor
     public CameraListActivityFragment() {
@@ -63,14 +64,14 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
 //        cameraNameList = new ArrayList<>(Arrays.asList("Camera 1", "Camera 2"));
 
         //instantiate adapter with data and both click listeners below
-        mAdapter = new CameraAdapter(cameraNameList, this, this);
+        mAdapter = new CameraAdapter(cameraNameList,urlList , this, this);
         mNumbersList.setAdapter(mAdapter);
         return view;
     }
 
     private void getCamerasRequest(){
 
-        String url = "http://ec2-54-242-89-175.compute-1.amazonaws.com:8000/api/camera/";
+        final String url = "http://ec2-54-242-89-175.compute-1.amazonaws.com:8000/api/camera/";
         StringRequest strReq = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -86,10 +87,14 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
 //                    },
                     //put each array
 
+                    //TODO add time, day, address to camera name list
+                    //put name of each camera name in an Arraylist
                     for(int i = 0; i < reader.length(); i++){
                         JSONObject jsonObject = reader.getJSONObject(i);
                         String cameraName = jsonObject.getString("name");
+                        String urlName = jsonObject.getString("address");
                         cameraNameList.add(cameraName);
+                        urlList.add(urlName);
                     }
 
                 } catch (JSONException e) {
@@ -143,7 +148,10 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
         if(requestCode == this.requestCode){
 
             if(resultCode == Activity.RESULT_OK){
-                //TODO Reset adapter to RecyclerView can have correct data
+                //TODO Reset adapter so RecyclerView can have correct data
+                //TODO empty adapter
+                //TODO call getCamera request
+                //TODO notify on changed adapter
                 //get values from keys
                 String time = data.getStringExtra("time_key");
                 boolean days[] = data.getBooleanArrayExtra("days_key");

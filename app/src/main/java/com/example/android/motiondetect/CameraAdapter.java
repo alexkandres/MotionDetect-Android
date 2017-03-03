@@ -17,15 +17,17 @@ import java.util.ArrayList;
 
 public class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.MyViewHolder>{
     private static final String TAG = CameraAdapter.class.getSimpleName();
-    private ArrayList<String> mNumberItems;
+    private ArrayList<String> nameList;
+    private ArrayList<String> urlList;
     private ListItemClickListener mOnClickListener;
     private OnLongClickListener onLongClickListener; //Reference CameraAdapter.OnLongClickListener
 
     //data to be sent in
-    public CameraAdapter(ArrayList<String> numberOfItems, ListItemClickListener listItemClickListener, OnLongClickListener onLongClickListener){
+    public CameraAdapter(ArrayList<String> numberOfItems, ArrayList<String> urlList, ListItemClickListener listItemClickListener, OnLongClickListener onLongClickListener){
         this.onLongClickListener = onLongClickListener;
         mOnClickListener = listItemClickListener;
-        mNumberItems = numberOfItems;
+        nameList = numberOfItems;
+        this.urlList = urlList;
     }
 
     @Override
@@ -49,7 +51,11 @@ public class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.MyViewHold
         //Ex camera data "Camera 1, 5:00PM - 12:00AM, 1111111; Camera 2, 5:00PM - 12:00AM, 1111110"
 
         //display Name in listItemNumberView textview
-        holder.listItemNumberView.setText(mNumberItems.get(position));
+        //display array item text in textview
+        holder.listItemNumberView.setText(nameList.get(position));
+
+        //display url item in textview
+        holder.urlTextView.setText(urlList.get(position));
 
         //TODO display Time in timetextview
 
@@ -58,7 +64,7 @@ public class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.MyViewHold
 
     @Override
     public int getItemCount() {
-        return mNumberItems.size();
+        return nameList.size();
     }
 
     public interface ListItemClickListener{
@@ -76,6 +82,7 @@ public class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.MyViewHold
         TextView fromTextView;
         TextView toTextView;
         TextView daysTextView;
+        TextView urlTextView;
 
         public MyViewHolder(View itemView){
             super(itemView);
@@ -88,6 +95,7 @@ public class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.MyViewHold
             fromTextView = (TextView) itemView.findViewById(R.id.from_textview);
             toTextView = (TextView) itemView.findViewById(R.id.to_textview);
             daysTextView = (TextView) itemView.findViewById(R.id.days_textview);
+            urlTextView = (TextView) itemView.findViewById(R.id.url_textview);
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
         }

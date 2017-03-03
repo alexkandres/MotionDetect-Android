@@ -48,6 +48,13 @@
             android:text="Mon, Tue, Wed, Thu, Fri, Sat, Sun"
             android:layout_below="@+id/from_textview"
             android:layout_alignParentLeft="true"/>
+        <TextView
+            android:id="@+id/url_textview"
+            android:text="http//exampl.com"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/days_textview"
+            android:layout_alignParentLeft="true"/>
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>

@@ -107,6 +107,8 @@ public class NotificationActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                //TODO send request to update time and days for notification, then call adapter.onchanged
                 Intent intent = new Intent();
 
                 //send from and to time
