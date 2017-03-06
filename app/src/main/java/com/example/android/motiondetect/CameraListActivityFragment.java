@@ -17,6 +17,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,7 +48,11 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.i("CameraListActivityFra", "no goood");
+        //token for this android device
+        //TODO save token to api with correct headers
+        String token = FirebaseInstanceId.getInstance().getToken();
+        Log.i("CameraListActivittttt", token);
+
         //inflate view
         View view = inflater.inflate(R.layout.fragment_camera_list, container, false);
 
