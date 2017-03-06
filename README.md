@@ -7,4 +7,4 @@ Android version of MotionDetect Web
 * Display list of cameras available
 
 ##Login
-![alt text](https://github.com/alexkandres/MotionDetect-Android/blob/master/app/src/main/login.png =100x400)
+<img src="https://github.com/alexkandres/MotionDetect-Android/blob/master/app/src/main/login.png" width="100" height="400">
