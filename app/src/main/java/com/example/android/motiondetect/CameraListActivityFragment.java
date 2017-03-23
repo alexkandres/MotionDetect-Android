@@ -36,6 +36,7 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
     public static CameraAdapter mAdapter;
     private RecyclerView mNumbersList;
     Toast mToast;
+    String androidToken;
 
     //may need to change to non-static variable
     public static ArrayList<String> cameraNameList = new ArrayList<>();
@@ -50,8 +51,9 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
                              Bundle savedInstanceState) {
         //token for this android device
         //TODO save token to api with correct headers
-        String token = FirebaseInstanceId.getInstance().getToken();
-        Log.i("CameraListActivittttt", token);
+        androidToken = FirebaseInstanceId.getInstance().getToken();
+        Log.i("CameraListActivittttt", androidToken);
+        sendAndroidToken();
 
         //inflate view
         View view = inflater.inflate(R.layout.fragment_camera_list, container, false);
@@ -74,6 +76,40 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
         return view;
     }
 
+    private void sendAndroidToken() {
+
+        final String url = "http://ec2-54-242-89-175.compute-1.amazonaws.com:8000/api/androidtoken/" + LoginActivity.id + "/";
+        StringRequest strReq = new StringRequest(Request.Method.PUT, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+            }
+        },
+                new Response.ErrorListener(){
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.i("Error.Response", "Ahhhh");
+                    }
+                }
+        ){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                map.put("Authorization", LoginActivity.token);
+                return map;
+            }
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("android_token", androidToken);
+                return params;
+            }
+        };
+        MySingleton.getInstance(getActivity().getApplicationContext()).addToRequestQueue(strReq);
+    }
+
     private void getCamerasRequest(){
 
         final String url = "http://ec2-54-242-89-175.compute-1.amazonaws.com:8000/api/camera/";
@@ -90,7 +126,6 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
 //                            "created_at": "2017-02-23T21:36:28Z",
 //                            "is_active": true
 //                    },
-                    //put each array
 
                     //TODO add time, day, address to camera name list
                     //put name of each camera name in an Arraylist
@@ -112,7 +147,6 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-//                        hideDialog();
                         Log.i("Error.Response", "Ahhhh");
                     }
                 }

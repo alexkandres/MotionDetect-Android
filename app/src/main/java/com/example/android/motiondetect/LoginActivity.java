@@ -38,6 +38,7 @@ public class LoginActivity extends AppCompatActivity {
      * TODO: remove after connecting to a real authentication system.
      */
     public static String token;
+    public static String id;
 
 
     // UI references.
@@ -126,7 +127,7 @@ public class LoginActivity extends AppCompatActivity {
                 try {
                     reader = new JSONObject(response);
                     token = "jwt " + reader.getString("token");
-
+                    id = reader.getString("id");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
