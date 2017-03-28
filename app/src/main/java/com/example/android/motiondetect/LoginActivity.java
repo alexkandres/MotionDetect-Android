@@ -127,7 +127,6 @@ public class LoginActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                Toast.makeText(LoginActivity.this, "Login Success!! Tok = " + token, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(LoginActivity.this, CameraListActivity.class);
                 startActivity(intent);
             }

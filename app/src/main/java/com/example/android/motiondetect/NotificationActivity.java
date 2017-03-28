@@ -52,6 +52,15 @@ public class NotificationActivity extends AppCompatActivity {
         fromTime = (TextView) findViewById(R.id.from_time);
         toTime = (TextView) findViewById(R.id.to_time);
 
+        //find checkview checkboxes
+        checkBox1 = (CheckBox) findViewById(R.id.mon_checkbox);
+        checkBox2 = (CheckBox) findViewById(R.id.tue_checkbox);
+        checkBox3 = (CheckBox) findViewById(R.id.wed_checkbox);
+        checkBox4 = (CheckBox) findViewById(R.id.thu_checkbox);
+        checkBox5 = (CheckBox) findViewById(R.id.fri_checkbox);
+        checkBox6 = (CheckBox) findViewById(R.id.sat_checkbox);
+        checkBox7 = (CheckBox) findViewById(R.id.sun_checkbox);
+
         //get from and to time from API
         setNotificationTimes();
 
@@ -142,7 +151,7 @@ public class NotificationActivity extends AppCompatActivity {
         });
     }
 
-    private String[] setNotificationTimes() {
+    private void setNotificationTimes() {
 
         final String url = "http://ec2-54-242-89-175.compute-1.amazonaws.com:8000/api/schedule/detail/" + LoginActivity.username + "/";
         StringRequest strReq = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
@@ -153,13 +162,32 @@ public class NotificationActivity extends AppCompatActivity {
                     reader = new JSONObject(response);
                     times[0] = reader.getString("time_from");
                     times[1] = reader.getString("time_to");
-                    Log.i("CameraListActivityyyy", "Post request works");
+
+                    //get booleans from requests
+                    days[0] = reader.getBoolean("monday");
+                    days[1] = reader.getBoolean("tuesday");
+                    days[2] = reader.getBoolean("wednesday");
+                    days[3] = reader.getBoolean("thursday");
+                    days[4] = reader.getBoolean("friday");
+                    days[5] = reader.getBoolean("saturday");
+                    days[6] = reader.getBoolean("sunday");
+
+
+                    processTimes(times);
 
                     //set from and to time
                     fromTime.setText(times[0]);
                     toTime.setText(times[1]);
 
-                    //set days to be notified
+                    //set check boxes
+                    checkBox1.setChecked(days[0]);
+                    checkBox2.setChecked(days[1]);
+                    checkBox3.setChecked(days[2]);
+                    checkBox4.setChecked(days[3]);
+                    checkBox5.setChecked(days[4]);
+                    checkBox6.setChecked(days[5]);
+                    checkBox7.setChecked(days[6]);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -183,19 +211,9 @@ public class NotificationActivity extends AppCompatActivity {
             }
         };
         MySingleton.getInstance(getApplicationContext()).addToRequestQueue(strReq);
-
-        return times;
     }
 
     private void checkDays(){
-
-        checkBox1 = (CheckBox) findViewById(R.id.mon_checkbox);
-        checkBox2 = (CheckBox) findViewById(R.id.tue_checkbox);
-        checkBox3 = (CheckBox) findViewById(R.id.wed_checkbox);
-        checkBox4 = (CheckBox) findViewById(R.id.thu_checkbox);
-        checkBox5 = (CheckBox) findViewById(R.id.fri_checkbox);
-        checkBox6 = (CheckBox) findViewById(R.id.sat_checkbox);
-        checkBox7 = (CheckBox) findViewById(R.id.sun_checkbox);
 
         days[0] = checkBox1.isChecked();
         days[1] = checkBox2.isChecked();
@@ -204,5 +222,23 @@ public class NotificationActivity extends AppCompatActivity {
         days[4] = checkBox5.isChecked();
         days[5] = checkBox6.isChecked();
         days[6] = checkBox7.isChecked();
+    }
+
+    private void processTimes(String [] times){
+        //00:00:00
+        String[] arrHourMin = times[0].split(":");
+        String[] arrHourMin2 = times[1].split(":");
+
+        //display format h = 12hr clk, mm = minute, a = am/pm
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("h:mma");
+        Time timefrom = new Time(Integer.parseInt(arrHourMin[0]), Integer.parseInt(arrHourMin[1]), 0);
+        Time timeto = new Time(Integer.parseInt(arrHourMin2[0]), Integer.parseInt(arrHourMin2[1]), 0);
+
+        String from = simpleDateFormat.format(timefrom);
+        String to = simpleDateFormat.format(timeto);
+
+        //update time by reference
+        times[0] = from;
+        times[1] = to;
     }
 }
