@@ -5,15 +5,27 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 public class NotificationActivity extends AppCompatActivity {
 
@@ -22,6 +34,7 @@ public class NotificationActivity extends AppCompatActivity {
     private Button cancelButton;
     private Button saveButton;
     private boolean days[] = new boolean[7];
+    private String[] times = new String[2];
     private CheckBox checkBox1;
     private CheckBox checkBox2;
     private CheckBox checkBox3;
@@ -37,6 +50,11 @@ public class NotificationActivity extends AppCompatActivity {
 
         //From time text view and click listener
         fromTime = (TextView) findViewById(R.id.from_time);
+        toTime = (TextView) findViewById(R.id.to_time);
+
+        //get from and to time from API
+        setNotificationTimes();
+
         fromTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -53,7 +71,7 @@ public class NotificationActivity extends AppCompatActivity {
                                 Time time = new Time(hour, minute, 0);
                                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("h:mma");
                                 String s = simpleDateFormat.format(time);
-                                fromTime.setText(s + " - ");
+                                fromTime.setText(s);
                             }
                         }, hour, minute,
                         DateFormat.is24HourFormat(NotificationActivity.this));
@@ -64,7 +82,6 @@ public class NotificationActivity extends AppCompatActivity {
             }
         });
 
-        toTime = (TextView) findViewById(R.id.to_time);
         toTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -123,6 +140,51 @@ public class NotificationActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private String[] setNotificationTimes() {
+
+        final String url = "http://ec2-54-242-89-175.compute-1.amazonaws.com:8000/api/schedule/detail/" + LoginActivity.username + "/";
+        StringRequest strReq = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                JSONObject reader;
+                try {
+                    reader = new JSONObject(response);
+                    times[0] = reader.getString("time_from");
+                    times[1] = reader.getString("time_to");
+                    Log.i("CameraListActivityyyy", "Post request works");
+
+                    //set from and to time
+                    fromTime.setText(times[0]);
+                    toTime.setText(times[1]);
+
+                    //set days to be notified
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        },
+                new Response.ErrorListener(){
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+//                        hideDialog();
+                        Log.i("Error.Response", "Ahhhh");
+                    }
+                }
+        ){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                map.put("Authorization", LoginActivity.token);
+                return map;
+            }
+        };
+        MySingleton.getInstance(getApplicationContext()).addToRequestQueue(strReq);
+
+        return times;
     }
 
     private void checkDays(){

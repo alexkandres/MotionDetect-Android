@@ -64,7 +64,7 @@ public class CameraListActivity extends AppCompatActivity {
                         cameraNameList.add(cameraName);
                         urlList.add(urlName);
 
-                        //TODO send to postNewCamera
+                        //send to postNewCamera
                         postNewCamera(cameraName, urlName);
 
                         //notify adapter that the data changed

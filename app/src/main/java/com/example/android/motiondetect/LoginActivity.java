@@ -17,7 +17,6 @@ import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
@@ -39,6 +38,7 @@ public class LoginActivity extends AppCompatActivity {
      */
     public static String token;
     public static String id;
+    public static String username;
 
 
     // UI references.
@@ -106,10 +106,6 @@ public class LoginActivity extends AppCompatActivity {
         return true;
     }
     private void loginUser(final String email, final String password){
-
-        //This queue should be made once
-//        RequestQueue queue = Volley.newRequestQueue(this);
-        RequestQueue requestQueue = MySingleton.getInstance(getApplicationContext()).getRequestQueue();
         progressDialog.setMessage("Logging in ...");
         //show dialog
         showDialog();
@@ -122,12 +118,11 @@ public class LoginActivity extends AppCompatActivity {
                 hideDialog();
                 JSONObject reader;
 
-                //TODO Token needs be accessible everywhere
-//                String token ="";
                 try {
                     reader = new JSONObject(response);
                     token = "jwt " + reader.getString("token");
                     id = reader.getString("id");
+                    username = reader.getString("username");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -149,7 +144,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("email", email);
+//                params.put("email", email);
+                params.put("username", email);
                 params.put("password", password);
                 return params;
             }
