@@ -63,10 +63,7 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
         if(requestCode == this.requestCode){
 
             if(resultCode == Activity.RESULT_OK){
-                //TODO Reset adapter so RecyclerView can have correct data
-                //TODO empty adapter
-                //TODO call getCamera request
-                //TODO notify on changed adapter
+                //TODO do something with data if i want
                 //get values from keys
                 String time = data.getStringExtra("time_key");
                 boolean days[] = data.getBooleanArrayExtra("days_key");

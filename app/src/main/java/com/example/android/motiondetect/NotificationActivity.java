@@ -22,8 +22,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.sql.Time;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -134,15 +136,35 @@ public class NotificationActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                //TODO send request to update time and days for notification, then call adapter.onchanged
-                Intent intent = new Intent();
-
-                //send from and to time
-                //set key so calling activity may retreive the data
-                intent.putExtra("time_key", fromTime.getText().toString() + toTime.getText().toString());
+                //get time from textview
+                String fromtime = fromTime.getText().toString();
+                String totime = toTime.getText().toString();
 
                 //save the days to be notified
                 checkDays();
+
+//                SimpleDateFormat displayFormat = new SimpleDateFormat("HH:mm");
+//                SimpleDateFormat parseFormat = new SimpleDateFormat("hh:mm a");
+//                Date date = parseFormat.parse("10:30 PM");
+//                System.out.println(parseFormat.format(date) + " = " + displayFormat.format(date));
+
+                //change format to 00:00:00 format
+                SimpleDateFormat parsTo = new SimpleDateFormat("HH:mm:ss");
+                SimpleDateFormat parseFrom = new SimpleDateFormat("h:mma");
+                try {
+                    Date date = parseFrom.parse(fromtime);
+                    Date dateto = parseFrom.parse(totime);
+                    times[0] = parsTo.format(date);
+                    times[1] = parsTo.format(dateto);
+
+                    sendNotificationPost();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                //set key so calling activity may retreive the data
+                Intent intent = new Intent();
+                intent.putExtra("time_key", fromtime + totime);
                 intent.putExtra("days_key", days);
 
                 setResult(RESULT_OK, intent);
@@ -151,6 +173,54 @@ public class NotificationActivity extends AppCompatActivity {
         });
     }
 
+    private void sendNotificationPost(){
+
+        final String url = "http://ec2-54-242-89-175.compute-1.amazonaws.com:8000/api/schedule/detail/" + LoginActivity.username + "/";
+        StringRequest strReq = new StringRequest(Request.Method.PUT, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                JSONObject reader;
+                try {
+                    reader = new JSONObject(response);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        },
+                new Response.ErrorListener(){
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.i("Error.Response", "Ahhhh");
+                    }
+                }
+        ){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                map.put("Authorization", LoginActivity.token);
+                return map;
+            }
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("time_from", times[0]);
+                params.put("time_to", times[1]);
+                params.put("monday", (days[0])? "1": "0");
+                params.put("tuesday", (days[1])? "1": "0");
+                params.put("wednesday", (days[2])? "1": "0");
+                params.put("thursday", (days[3])? "1": "0");
+                params.put("friday", (days[4])? "1": "0");
+                params.put("saturday",(days[5])? "1": "0");
+                params.put("sunday", (days[6])? "1": "0");
+                return params;
+            }
+        };
+        MySingleton.getInstance(getApplicationContext()).addToRequestQueue(strReq);
+    }
     private void setNotificationTimes() {
 
         final String url = "http://ec2-54-242-89-175.compute-1.amazonaws.com:8000/api/schedule/detail/" + LoginActivity.username + "/";
