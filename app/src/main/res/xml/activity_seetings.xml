@@ -21,12 +21,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-        <Preference
-            android:key="timePicker"
-            android:title="Time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
     </PreferenceCategory>
 
 </PreferenceScreen>

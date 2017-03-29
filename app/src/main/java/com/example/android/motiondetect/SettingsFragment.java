@@ -1,7 +1,6 @@
 package com.example.android.motiondetect;
 
 import android.app.Activity;
-import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -23,11 +22,9 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
 
         addPreferencesFromResource(R.xml.activity_seetings);
         datePicker = findPreference("datePicker");
-        timePicker = findPreference("timePicker");
 
         //refers to overriden onPreferenceClick below
         datePicker.setOnPreferenceClickListener(this);
-        timePicker.setOnPreferenceClickListener(this);
 
     }
 
@@ -46,10 +43,6 @@ public class SettingsFragment extends PreferenceFragment implements Preference.O
                 Intent intent = new Intent(getActivity(), NotificationActivity.class);
                 startActivityForResult(intent, requestCode);
                 break;
-            case "timePicker":
-                //TODO Remove time picker, this will go into activity instead of dialog
-                DialogFragment timeDialogFragment = new TimePickerFragment();
-                timeDialogFragment.show(getFragmentManager(), "Time Picker");
         }
 
         return false;
