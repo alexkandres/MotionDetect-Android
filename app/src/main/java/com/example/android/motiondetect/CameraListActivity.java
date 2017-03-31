@@ -142,14 +142,29 @@ public class CameraListActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-//            DialogFragment newDialogFragment = new DatePickerFragment();
-//            newDialogFragment.show(getSupportFragmentManager(), "DATE PICKER");
-            Intent intent = new Intent(this, SettingsActivity.class);
-            startActivity(intent);
-            return true;
+        switch(id){
+            case R.id.action_logout:
+                Intent intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+                break;
+            case R.id.action_settings:
+                Intent intent2 = new Intent(this, SettingsActivity.class);
+                startActivity(intent2);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.i("CameraListActicityyy", "onDestroty");
     }
 }

@@ -12,7 +12,6 @@ import java.util.Arrays;
 public class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener, Preference.OnPreferenceClickListener {
 
     Preference datePicker;
-    Preference timePicker;
     int requestCode = 1;
 
     @Override
