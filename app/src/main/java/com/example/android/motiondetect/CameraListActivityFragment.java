@@ -2,6 +2,7 @@ package com.example.android.motiondetect;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.amazonaws.auth.CognitoCachingCredentialsProvider;
+import com.amazonaws.regions.Regions;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -53,10 +56,13 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
         //TODO save token to api with correct headers
         androidToken = FirebaseInstanceId.getInstance().getToken();
         Log.i("CameraListActivittttt", androidToken);
-        sendAndroidToken();
+//        sendAndroidToken();
 
         //inflate view
         View view = inflater.inflate(R.layout.fragment_camera_list, container, false);
+
+        //load aws
+        new LoadAwsTask().execute();
 
         //find recycler view
         mNumbersList = (RecyclerView) view.findViewById(R.id.camera_numbers);
@@ -199,6 +205,25 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
             else if(resultCode == Activity.RESULT_CANCELED){
                 Toast.makeText(getActivity(), "No notification change", Toast.LENGTH_LONG).show();
             }
+        }
+    }
+
+    private class LoadAwsTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            // Initialize the Amazon Cognito credentials provider
+            CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
+                    getActivity(),
+                    "us-east-1:844f80c7-2fbf-40b1-b7d4-472e608e3197", // Identity Pool ID
+                    Regions.US_EAST_1 // Region
+            );
+
+            //send credentials to registration constructor
+            Registration registration = new Registration(credentialsProvider);
+            registration.registerWithSNS();
+
+            return null;
         }
     }
 }
