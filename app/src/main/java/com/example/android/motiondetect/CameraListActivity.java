@@ -141,13 +141,16 @@ public class CameraListActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-//            DialogFragment newDialogFragment = new DatePickerFragment();
-//            newDialogFragment.show(getSupportFragmentManager(), "DATE PICKER");
-            Intent intent = new Intent(this, SettingsActivity.class);
-            startActivity(intent);
-            return true;
+        switch (id){
+            case R.id.action_settings:
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
+                return true;
+            case R.id.action_logout:
+                Intent intent2 = new Intent(this, LoginActivity.class);
+                startActivity(intent2);
+                finish();
+                break;
         }
 
         return super.onOptionsItemSelected(item);
