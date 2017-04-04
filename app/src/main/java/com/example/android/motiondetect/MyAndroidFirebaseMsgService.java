@@ -22,7 +22,7 @@ public class MyAndroidFirebaseMsgService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         //Log data to Log Cat
         Log.d(TAG, "From: " + remoteMessage.getFrom());
-        Log.d(TAG, "Notification Message Body: " + remoteMessage.getNotification().getBody());
+//        Log.d(TAG, "Notification Message Body: " + remoteMessage.getNotification().getBody());
         //create notification
         String title = remoteMessage.getNotification().getTitle();
         String body = remoteMessage.getNotification().getBody();
