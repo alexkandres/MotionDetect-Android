@@ -3,6 +3,8 @@
     <string name="camera_list">Camera List</string>
     <string name="action_settings">Settings</string>
     <string name="action_logout">Logout</string>
+    <string name="live_stream">Live</string>
+    <string name="saved_videos">Saved Videos</string>
     <string name="notification_settings">Notifications</string>
     <string name="dialog_message">Message</string>
     <string name="dialog_title">Add Camera</string>

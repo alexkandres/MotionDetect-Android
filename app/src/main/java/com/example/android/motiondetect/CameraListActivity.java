@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -37,6 +38,11 @@ public class CameraListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_camera_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //TabLayout
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tablayout);
+        tabLayout.addTab(tabLayout.newTab().setText("Live"));
+        tabLayout.addTab(tabLayout.newTab().setText("Saved Videos"));
 
         //set AlertDialog on FAB
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);

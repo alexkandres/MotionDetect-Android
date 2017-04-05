@@ -30,7 +30,7 @@ public class MyAndroidFirebaseMsgService extends FirebaseMessagingService {
     }
 
     private void createNotification(String title, String messageBody) {
-        Intent intent = new Intent( this , LoginActivity. class );
+        Intent intent = new Intent( this , CameraListActivity.class );
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent resultIntent = PendingIntent.getActivity( this , 0, intent,
                 PendingIntent.FLAG_ONE_SHOT);

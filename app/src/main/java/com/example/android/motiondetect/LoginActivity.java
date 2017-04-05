@@ -24,6 +24,7 @@ import com.android.volley.toolbox.StringRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -136,7 +137,26 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     hideDialog();
-                    Log.i("Error.Response", error.getMessage());
+
+                    if(error.networkResponse.data != null){
+                        try {
+                            String body = new String(error.networkResponse.data, "UTF-8");
+                            Log.i("Error.Responseee", body);
+
+                            //TODO process response
+                            try {
+                                JSONObject jsonObject = new JSONObject(body);
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+//                            reader = new JSONObject(response);
+//                            token = "jwt " + reader.getString("token");
+//                            id = reader.getString("id");
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
             }
         ){
