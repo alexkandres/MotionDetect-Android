@@ -68,7 +68,7 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
         //TODO save token to api with correct headers
         androidToken = FirebaseInstanceId.getInstance().getToken();
         Log.i("CameraListActivittttt", androidToken);
-//        sendAndroidToken();
+//        sendAndroidEndpoint();
         new LoadAwsTask().execute();
         //inflate view
         View view = inflater.inflate(R.layout.fragment_camera_list, container, false);
@@ -89,40 +89,6 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
         mAdapter = new CameraAdapter(cameraNameList,urlList , this, this);
         mNumbersList.setAdapter(mAdapter);
         return view;
-    }
-
-    private void sendAndroidToken() {
-
-        final String url = "http://ec2-54-242-89-175.compute-1.amazonaws.com:8000/api/androidtoken/" + LoginActivity.id + "/";
-        StringRequest strReq = new StringRequest(Request.Method.PUT, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-
-            }
-        },
-                new Response.ErrorListener(){
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.i("Error.Response", "Ahhhh");
-                    }
-                }
-        ){
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> map = new HashMap<>();
-                map.put("Authorization", LoginActivity.token);
-                return map;
-            }
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("android_token", androidToken);
-                return params;
-            }
-        };
-        MySingleton.getInstance(getActivity().getApplicationContext()).addToRequestQueue(strReq);
     }
 
     private void getCamerasRequest(){
@@ -224,6 +190,7 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
         private String applicationArn = "arn:aws:sns:us-east-1:397403242286:app/GCM/MotionDect";
         private String tokenInstance;
         private final String preferenceFile = "com.example.android.motiondetect.PreferenceFile";
+        String endpointArn;
 
         @Override
         protected Void doInBackground(Void... voids) {
@@ -243,7 +210,7 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
 
         public void registerWithSNS() {
 //            storeEndpointArn(null);
-            String endpointArn = retrieveEndpointArn();
+            endpointArn = retrieveEndpointArn();
             tokenInstance = FirebaseInstanceId.getInstance().getToken();
 
             boolean updateNeeded = false;
@@ -303,7 +270,7 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
          * */
         private String createEndpoint() {
             Log.i("Registrationnnn:", "CreateEndpointtt");
-            String endpointArn = null;
+            endpointArn = null;
             try {
                 System.out.println("Creating platform endpoint with token " + tokenInstance);
                 CreatePlatformEndpointRequest cpeReq =
@@ -361,6 +328,43 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putString(preferenceFile, endpointArn);
             editor.commit();
+
+            //send to /api/endpoint/create/
+            sendAndroidEndpoint();
+        }
+
+        private void sendAndroidEndpoint() {
+
+            final String url = "http://ec2-54-242-89-175.compute-1.amazonaws.com:8000/api/endpoint/create/";
+            StringRequest strReq = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    Log.i("SendAndroidEndpoint Suc", response);
+                }
+            },
+                    new Response.ErrorListener(){
+
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.i("SendAndroidEndpointttt", "Could not post endpoint to /endpoint/create/");
+                        }
+                    }
+            ){
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> map = new HashMap<>();
+                    map.put("Authorization", LoginActivity.token);
+                    return map;
+                }
+
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("endpoint", endpointArn);
+                    return params;
+                }
+            };
+            MySingleton.getInstance(getActivity().getApplicationContext()).addToRequestQueue(strReq);
         }
     }
 }
