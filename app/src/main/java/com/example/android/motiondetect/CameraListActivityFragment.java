@@ -1,6 +1,7 @@
 package com.example.android.motiondetect;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -52,6 +53,7 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
     private RecyclerView mNumbersList;
     Toast mToast;
     String androidToken;
+    ProgressDialog progressDialog;
 
     //may need to change to non-static variable
     public static ArrayList<String> cameraNameList = new ArrayList<>();
@@ -67,8 +69,7 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
         //token for this android device
         //TODO save token to api with correct headers
         androidToken = FirebaseInstanceId.getInstance().getToken();
-        Log.i("CameraListActivittttt", androidToken);
-//        sendAndroidEndpoint();
+
         new LoadAwsTask().execute();
         //inflate view
         View view = inflater.inflate(R.layout.fragment_camera_list, container, false);
@@ -93,11 +94,15 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
 
     private void getCamerasRequest(){
 
+        progressDialog.setMessage("Logging in ...");
+        //show dialog
+        showDialog();
         final String url = "http://ec2-54-242-89-175.compute-1.amazonaws.com:8000/api/camera/";
         StringRequest strReq = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 JSONArray reader;
+                hideDialog();
                 try {
                     reader = new JSONArray(response);
 //                    {
@@ -146,8 +151,10 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
         if(mToast != null){
             mToast.cancel();
         }
+
+        //TODO send url
         Intent intent = new Intent(getActivity(), LiveActivityMainActivity.class);
-        intent.putExtra("Camera Name", indexClicked);
+        intent.putExtra("Camera Name", urlList.get(indexClicked));
         startActivity(intent);
     }
 
@@ -183,6 +190,15 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
         }
     }
 
+    private void showDialog() {
+        if (!progressDialog.isShowing())
+            progressDialog.show();
+    }
+
+    private void hideDialog() {
+        if (progressDialog.isShowing())
+            progressDialog.dismiss();
+    }
     private class LoadAwsTask extends AsyncTask<Void, Void, Void> {
 
         private AmazonSNSClient client; //provide credentials here
