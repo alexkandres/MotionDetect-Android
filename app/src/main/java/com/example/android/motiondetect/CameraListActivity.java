@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -30,7 +31,10 @@ import java.util.Map;
 import static com.example.android.motiondetect.CameraListActivityFragment.cameraNameList;
 import static com.example.android.motiondetect.CameraListActivityFragment.urlList;
 
-public class CameraListActivity extends AppCompatActivity {
+public class CameraListActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener{
+
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +44,21 @@ public class CameraListActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         //TabLayout
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tablayout);
+        tabLayout = (TabLayout) findViewById(R.id.tablayout);
         tabLayout.addTab(tabLayout.newTab().setText("Live"));
         tabLayout.addTab(tabLayout.newTab().setText("Saved Videos"));
 
+        viewPager = (ViewPager) findViewById(R.id.pager);
+
+        //Creating our pager adapter
+        Pager adapter = new Pager(getSupportFragmentManager(), tabLayout.getTabCount());
+
+        //Adding adapter to pager
+        viewPager.setAdapter(adapter);
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+
+        //Adding onTabSelectedListener to swipe views
+        tabLayout.setOnTabSelectedListener(this);
         //set AlertDialog on FAB
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -90,6 +105,7 @@ public class CameraListActivity extends AppCompatActivity {
             }
         });
     }
+
 
     public void postNewCamera(final String cameraName, final String urlName){
 
@@ -160,5 +176,20 @@ public class CameraListActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        viewPager.setCurrentItem(tab.getPosition());
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+
     }
 }
