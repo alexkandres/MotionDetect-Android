@@ -16,9 +16,12 @@ import java.util.Arrays;
  * Created by alex on 4/5/2017.
  */
 
-public class SavedVideosFragment extends Fragment {
+public class SavedVideosFragment extends Fragment implements SavedVideosCameraAdapter.ListItemClickListener, SavedVideosCameraAdapter.OnLongClickListener{
 
-    public static ArrayList<String> cameraNameList = new ArrayList<>();
+    private SavedVideosCameraAdapter savedVideosCameraAdapter;
+    private ArrayList<String> savedVideoList = new ArrayList<>();
+    private ArrayList<String> urlList = new ArrayList<>();
+    private ArrayList<String> urlDeleteList = new ArrayList<>();
 
     @Nullable
     @Override
@@ -35,11 +38,26 @@ public class SavedVideosFragment extends Fragment {
         mNumbersList.setLayoutManager(layoutManager);
 
 ////        getCamerasRequest();
-        cameraNameList = new ArrayList<>(Arrays.asList("Camera 1", "Camera 2"));
+        savedVideoList = new ArrayList<>(Arrays.asList("Saved Video 1", "Saved Video 2"));
+        urlList = new ArrayList<>(Arrays.asList("example.com", "exampletest.com"));
 
         //instantiate adapter with data and both click listeners below
-////        mAdapter = new CameraAdapter(cameraNameList,urlList , this, this);
-//        mNumbersList.setAdapter(mAdapter);
+        savedVideosCameraAdapter = new SavedVideosCameraAdapter(savedVideoList,urlList , this, this);
+        mNumbersList.setAdapter(savedVideosCameraAdapter);
         return view;
+    }
+
+    @Override
+    public void onListItemClicked(int indexClicked) {
+        //TODO create intent
+        //TODO pass url to intent
+        //TODO start intnent
+    }
+
+    @Override
+    public void onItemLongClicked(int pos) {
+        //TODO dialog popup
+        //TODO dialog presets edit
+        //TODO dialog presets delete
     }
 }

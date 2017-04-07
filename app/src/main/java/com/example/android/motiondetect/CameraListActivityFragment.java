@@ -83,6 +83,7 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
         //set manager to recyclerview
         mNumbersList.setLayoutManager(layoutManager);
 
+        //set cameraNameList and urlList
         getCamerasRequest();
 //        cameraNameList = new ArrayList<>(Arrays.asList("Camera 1", "Camera 2"));
 
@@ -94,15 +95,15 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
 
     private void getCamerasRequest(){
 
-        progressDialog.setMessage("Logging in ...");
+//        progressDialog.setMessage("Logging in ...");
         //show dialog
-        showDialog();
+//        showDialog();
         final String url = "http://ec2-54-242-89-175.compute-1.amazonaws.com:8000/api/camera/";
         StringRequest strReq = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 JSONArray reader;
-                hideDialog();
+//                hideDialog();
                 try {
                     reader = new JSONArray(response);
 //                    {
@@ -122,6 +123,7 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
                         cameraNameList.add(cameraName);
                         urlList.add(urlName);
                     }
+                    mAdapter.notifyDataSetChanged();
 
                 } catch (JSONException e) {
                     e.printStackTrace();
