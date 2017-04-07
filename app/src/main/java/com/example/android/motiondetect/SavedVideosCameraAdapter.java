@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 
 /**
@@ -51,10 +53,10 @@ public class SavedVideosCameraAdapter extends RecyclerView.Adapter<SavedVideosCa
         //display Name in listItemNumberView textview
         //display array item text in textview
         holder.listItemNumberView.setText(nameList.get(position));
+        Context context = holder.imageView.getContext();
+        //use picasso to display urlimg in imageview
+        Picasso.with(context).load(urlList.get(position)).into(holder.imageView);
 
-        //display url item in textview
-//        holder.urlTextView.setText(urlList.get(position));
-//        holder.imageView.;
     }
 
     @Override
