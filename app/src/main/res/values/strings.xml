@@ -5,6 +5,7 @@
     <string name="action_logout">Logout</string>
     <string name="live_stream">Live</string>
     <string name="saved_videos">Saved Videos</string>
+    <string name="saved_video">Saved Video</string>
     <string name="notification_settings">Notifications</string>
     <string name="dialog_message">Message</string>
     <string name="dialog_title">Add Camera</string>
