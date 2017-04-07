@@ -53,7 +53,8 @@ public class SavedVideosCameraAdapter extends RecyclerView.Adapter<SavedVideosCa
         holder.listItemNumberView.setText(nameList.get(position));
 
         //display url item in textview
-        holder.urlTextView.setText(urlList.get(position));
+//        holder.urlTextView.setText(urlList.get(position));
+//        holder.imageView.;
     }
 
     @Override

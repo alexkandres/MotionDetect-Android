@@ -5,12 +5,24 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by alex on 4/5/2017.
@@ -18,9 +30,10 @@ import java.util.Arrays;
 
 public class SavedVideosFragment extends Fragment implements SavedVideosCameraAdapter.ListItemClickListener, SavedVideosCameraAdapter.OnLongClickListener{
 
+    String TAG = SavedVideosFragment.class.getSimpleName();
     private SavedVideosCameraAdapter savedVideosCameraAdapter;
     private ArrayList<String> savedVideoList = new ArrayList<>();
-    private ArrayList<String> urlList = new ArrayList<>();
+    private ArrayList<String> thumbnailurls = new ArrayList<>();
     private ArrayList<String> urlDeleteList = new ArrayList<>();
 
     @Nullable
@@ -37,16 +50,71 @@ public class SavedVideosFragment extends Fragment implements SavedVideosCameraAd
         //set manager to recyclerview
         mNumbersList.setLayoutManager(layoutManager);
 
-////        getCamerasRequest();
-        savedVideoList = new ArrayList<>(Arrays.asList("Saved Video 1", "Saved Video 2"));
-        urlList = new ArrayList<>(Arrays.asList("example.com", "exampletest.com"));
+        getVideoRequest();
+//        savedVideoList = new ArrayList<>(Arrays.asList("Saved Video 1", "Saved Video 2"));
+//        thumbnailurls = new ArrayList<>(Arrays.asList("example.com", "exampletest.com"));
 
         //instantiate adapter with data and both click listeners below
-        savedVideosCameraAdapter = new SavedVideosCameraAdapter(savedVideoList,urlList , this, this);
+        savedVideosCameraAdapter = new SavedVideosCameraAdapter(savedVideoList, thumbnailurls, this, this);
         mNumbersList.setAdapter(savedVideosCameraAdapter);
         return view;
     }
 
+    private void getVideoRequest(){
+
+        //TODO process request
+//        http://ec2-54-242-89-175.compute-1.amazonaws.com:8000/api/video/list/hello/
+        final String url = "http://ec2-54-242-89-175.compute-1.amazonaws.com:8000/api/video/list/" + LoginActivity.username + "/";
+        StringRequest strReq = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                JSONArray reader;
+                try {
+                    reader = new JSONArray(response);
+//                    {
+//                        "id": 71,
+//                            "path": "https://s3.amazonaws.com/sketchflow/hello/04052017191527.mp4",
+//                            "thumbnail": "https://s3.amazonaws.com/sketchflow/hello/04052017191527.jpg",
+//                            "size": 142.6,
+//                            "delete": "http://ec2-54-242-89-175.compute-1.amazonaws.com:8000/api/video/delete/71/"
+//                    },
+
+                    //TODO add time, day, address to camera name list
+                    //put name of each camera name in an Arraylist
+                    for(int i = 0; i < reader.length(); i++){
+                        JSONObject jsonObject = reader.getJSONObject(i);
+                        String videoUrl = jsonObject.getString("path");
+                        String thumbnailUrl = jsonObject.getString("thumbnail");
+                        String deleteVideoUrl = jsonObject.getString("delete");
+                        savedVideoList.add(videoUrl);
+                        thumbnailurls.add(thumbnailUrl);
+                        urlDeleteList.add(deleteVideoUrl);
+                    }
+                    savedVideosCameraAdapter.notifyDataSetChanged();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        },
+                new Response.ErrorListener(){
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.i(TAG, "Error with saved video request");
+                    }
+                }
+        ){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                map.put("Authorization", LoginActivity.token);
+                return map;
+            }
+        };
+        MySingleton.getInstance(getActivity().getApplicationContext()).addToRequestQueue(strReq);
+    }
     @Override
     public void onListItemClicked(int indexClicked) {
         //TODO create intent
