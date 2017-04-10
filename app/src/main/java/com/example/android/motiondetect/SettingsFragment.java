@@ -3,6 +3,7 @@ package com.example.android.motiondetect;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.widget.Toast;
@@ -12,16 +13,20 @@ import java.util.Arrays;
 public class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener, Preference.OnPreferenceClickListener {
 
     Preference datePicker;
+    CheckBoxPreference checkBoxPreference;
     int requestCode = 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_seetings);
 
         addPreferencesFromResource(R.xml.activity_seetings);
-        datePicker = findPreference("datePicker");
 
+        checkBoxPreference = (CheckBoxPreference) findPreference("pref_sync");
+
+        checkBoxPreference.setChecked(false);
+
+        datePicker = findPreference("datePicker");
         //refers to overriden onPreferenceClick below
         datePicker.setOnPreferenceClickListener(this);
 
