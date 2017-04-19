@@ -11,6 +11,9 @@
     <string name="dialog_title">Add Camera</string>
     <string name="camera_url">Stream</string>
     <string name="camera_name">Camera Name</string>
+    <string name="delete_stream">Delete Stream</string>
+    <string name="edit_stream">Edit Stream</string>
+    <string name="edit_options">Options</string>
 
     <string name="title_activity_live_feed">LiveFeedActivity</string>
     <string name="dummy_button">Dummy Button</string>

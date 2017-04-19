@@ -19,15 +19,17 @@ public class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.MyViewHold
     private static final String TAG = CameraAdapter.class.getSimpleName();
     private ArrayList<String> nameList;
     private ArrayList<String> urlList;
+    private ArrayList<String> cameraIdList;
     private ListItemClickListener mOnClickListener;
     private OnLongClickListener onLongClickListener; //Reference CameraAdapter.OnLongClickListener
 
     //data to be sent in
-    public CameraAdapter(ArrayList<String> numberOfItems, ArrayList<String> urlList, ListItemClickListener listItemClickListener, OnLongClickListener onLongClickListener){
+    public CameraAdapter(ArrayList<String> numberOfItems, ArrayList<String> urlList, ArrayList<String> cameraIdList, ListItemClickListener listItemClickListener, OnLongClickListener onLongClickListener){
         this.onLongClickListener = onLongClickListener;
         mOnClickListener = listItemClickListener;
         nameList = numberOfItems;
         this.urlList = urlList;
+        this.cameraIdList = cameraIdList;
     }
 
     @Override
@@ -67,6 +69,18 @@ public class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.MyViewHold
         return nameList.size();
     }
 
+    public boolean deleteCamera(int removeIndex){
+        nameList.remove(removeIndex);
+        urlList.remove(removeIndex);
+        cameraIdList.remove(removeIndex);
+        return true;
+    }
+
+    public void addCamera(String name, String url, String cid){
+        nameList.add(name);
+        urlList.add(url);
+        cameraIdList.add(cid);
+    }
     public interface ListItemClickListener{
         void onListItemClicked(int indexClicked);
     }

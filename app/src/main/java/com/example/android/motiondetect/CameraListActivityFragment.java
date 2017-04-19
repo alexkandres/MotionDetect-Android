@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
@@ -63,6 +64,7 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
     //may need to change to non-static variable
     public static ArrayList<String> cameraNameList = new ArrayList<>();
     public static ArrayList<String> urlList = new ArrayList<>();
+    public static ArrayList<String> cameraIdList = new ArrayList<>();
 
     //constructor
     public CameraListActivityFragment() {
@@ -93,9 +95,10 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
 //        cameraNameList = new ArrayList<>(Arrays.asList("Camera 1", "Camera 2"));
 
         //instantiate adapter with data and both click listeners below
-        mAdapter = new CameraAdapter(cameraNameList,urlList , this, this);
+        mAdapter = new CameraAdapter(cameraNameList,urlList , cameraIdList, this, this);
         mNumbersList.setAdapter(mAdapter);
 
+        //Add camera with this FAB
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,14 +121,12 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
                         String cameraName = editText.getText().toString();
                         String urlName = editUrlText.getText().toString();
 
-                        cameraNameList.add(cameraName);
-                        urlList.add(urlName);
+//                        cameraNameList.add(cameraName);
+//                        urlList.add(urlName);
 
                         //send to postNewCamera
                         postNewCamera(cameraName, urlName);
 
-                        //notify adapter that the data changed
-                        CameraListActivityFragment.mAdapter.notifyDataSetChanged();
                     }
                 }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
@@ -150,9 +151,15 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
         StringRequest strReq = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                JSONArray reader;
+                JSONObject reader;
                 try {
-                    reader = new JSONArray(response);
+
+                    //TODO read cid,call adapter.add
+                    reader = new JSONObject(response);
+                    String cid = reader.getString("cid");
+                    mAdapter.addCamera(cameraName, urlName, cid);
+                    //notify adapter that the data changed
+                    mAdapter.notifyDataSetChanged();
                     Log.i("CameraListActivityyyy", "Post request works");
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -213,8 +220,10 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
                         JSONObject jsonObject = reader.getJSONObject(i);
                         String cameraName = jsonObject.getString("name");
                         String urlName = jsonObject.getString("address");
+                        String camerId = jsonObject.getString("cid");
                         cameraNameList.add(cameraName);
                         urlList.add(urlName);
+                        cameraIdList.add(camerId);
                     }
                     mAdapter.notifyDataSetChanged();
 
@@ -260,11 +269,94 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
 
     private int requestCode = 1;
     @Override
-    public void onItemLongClicked(int pos) {
-        Intent intent = new Intent(getActivity(), NotificationActivity.class);
-        intent.putExtra("Camera Name", pos);
-        startActivityForResult(intent, requestCode);
+    public void onItemLongClicked(final int pos) {
+//        Intent intent = new Intent(getActivity(), NotificationActivity.class);
+//        intent.putExtra("Camera Name", pos);
+//        startActivityForResult(intent, requestCode);
+
+        LayoutInflater inflater = LayoutInflater.from(getActivity());
+        View view = inflater.inflate(R.layout.camera_options_dialog,null);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setView(view);
+        builder.setTitle(R.string.edit_options);
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+
+        //set delete when textview is clicked
+        TextView textView = (TextView) view.findViewById(R.id.delete_stream);
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                //Verify that user wants to delete
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Are You sure?");
+                builder.setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        deleteStream(pos);
+                        Toast.makeText(getActivity(), "Delete Confirmed", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                Toast.makeText(getActivity(), "Delete Clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //set edit when textview is clicked
+        TextView textView2 = (TextView) view.findViewById(R.id.edit_stream);
+        textView2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getActivity(), "Edit Clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
     }
+
+    private void deleteStream(final int pos) {
+
+        final String url = "http://ec2-54-242-89-175.compute-1.amazonaws.com:8000/api/camera/"+cameraIdList.get(pos)+"/";
+        StringRequest strReq = new StringRequest(Request.Method.DELETE, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                //update cameraAdapter
+                mAdapter.deleteCamera(pos);
+                mAdapter.notifyDataSetChanged();
+            }
+        },
+                new Response.ErrorListener(){
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.i("Delete Error", "Could not delete camera");
+                    }
+                }
+        ){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                map.put("Authorization", LoginActivity.token);
+                return map;
+            }
+        };
+        MySingleton.getInstance(getActivity().getApplicationContext()).addToRequestQueue(strReq);
+    }
+
 
 
     //will be called after NotificationActivity finishes
@@ -299,6 +391,8 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
         if (progressDialog.isShowing())
             progressDialog.dismiss();
     }
+
+    //innerClass Start
     private class LoadAwsTask extends AsyncTask<Void, Void, Void> {
 
         private AmazonSNSClient client; //provide credentials here
