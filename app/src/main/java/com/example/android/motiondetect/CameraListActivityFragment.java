@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -247,9 +248,14 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
         }
 
         //TODO send url
-        Intent intent = new Intent(getActivity(), LiveActivityMainActivity.class);
-        intent.putExtra("Camera Name", urlList.get(indexClicked));
+        Uri newVideoPath = Uri.parse(urlList.get(indexClicked));
+        Intent intent = new Intent(Intent.ACTION_VIEW, newVideoPath);
+        intent.setDataAndType(newVideoPath, "video/mjpeg");
         startActivity(intent);
+
+//        Intent intent = new Intent(getActivity(), LiveActivityMainActivity.class);
+//        intent.putExtra("Camera Name", urlList.get(indexClicked));
+//        startActivity(intent);
     }
 
     private int requestCode = 1;
