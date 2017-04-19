@@ -23,8 +23,8 @@ public class CameraListActivity extends AppCompatActivity implements TabLayout.O
 
         //TabLayout
         tabLayout = (TabLayout) findViewById(R.id.tablayout);
-        tabLayout.addTab(tabLayout.newTab().setText("Live"));
-        tabLayout.addTab(tabLayout.newTab().setText("Saved Videos"));
+        tabLayout.addTab(tabLayout.newTab().setText("Live").setIcon(R.drawable.cast_ic_notification_small_icon));
+        tabLayout.addTab(tabLayout.newTab().setText("Saved Videos").setIcon(R.drawable.ic_save_video));
 
         viewPager = (ViewPager) findViewById(R.id.pager);
 
