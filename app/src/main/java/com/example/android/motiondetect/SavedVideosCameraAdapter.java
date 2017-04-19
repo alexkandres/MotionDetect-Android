@@ -22,17 +22,19 @@ public class SavedVideosCameraAdapter extends RecyclerView.Adapter<SavedVideosCa
     private static final String TAG = SavedVideosCameraAdapter.class.getSimpleName();
     private ArrayList<String> nameList;
     private ArrayList<String> urlList;
+    private ArrayList<String> videoNameList;
     //TODO may not need this in Adapter. Does not have to display in CardView. Just save
     private ArrayList<String> deleteUrlList;
     private SavedVideosCameraAdapter.ListItemClickListener mOnClickListener;
     private SavedVideosCameraAdapter.OnLongClickListener onLongClickListener; //Reference CameraAdapter.OnLongClickListener
 
     //data to be sent in
-    public SavedVideosCameraAdapter(ArrayList<String> numberOfItems, ArrayList<String> urlList, SavedVideosCameraAdapter.ListItemClickListener listItemClickListener, SavedVideosCameraAdapter.OnLongClickListener onLongClickListener){
+    public SavedVideosCameraAdapter(ArrayList<String> numberOfItems, ArrayList<String> urlList, ArrayList<String> videoNameList,SavedVideosCameraAdapter.ListItemClickListener listItemClickListener, SavedVideosCameraAdapter.OnLongClickListener onLongClickListener){
         mOnClickListener = listItemClickListener;
         this.onLongClickListener = onLongClickListener;
         nameList = numberOfItems;
         this.urlList = urlList;
+        this.videoNameList = videoNameList;
     }
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
@@ -52,7 +54,7 @@ public class SavedVideosCameraAdapter extends RecyclerView.Adapter<SavedVideosCa
     public void onBindViewHolder(MyViewHolder holder, int position) {
         //display Name in listItemNumberView textview
         //display array item text in textview
-//        holder.listItemNumberView.setText(nameList.get(position));
+        holder.listItemNumberView.setText(videoNameList.get(position));
         Context context = holder.imageView.getContext();
         //use picasso to display urlimg in imageview
         Picasso.with(context).load(urlList.get(position)).into(holder.imageView);

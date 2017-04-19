@@ -36,6 +36,7 @@ public class SavedVideosFragment extends Fragment implements SavedVideosCameraAd
     private ArrayList<String> savedVideoList = new ArrayList<>();
     private ArrayList<String> thumbnailurls = new ArrayList<>();
     private ArrayList<String> urlDeleteList = new ArrayList<>();
+    private ArrayList<String> videoNameList = new ArrayList<>();
 
     @Nullable
     @Override
@@ -56,7 +57,7 @@ public class SavedVideosFragment extends Fragment implements SavedVideosCameraAd
 //        thumbnailurls = new ArrayList<>(Arrays.asList("example.com", "exampletest.com"));
 
         //instantiate adapter with data and both click listeners below
-        savedVideosCameraAdapter = new SavedVideosCameraAdapter(savedVideoList, thumbnailurls, this, this);
+        savedVideosCameraAdapter = new SavedVideosCameraAdapter(savedVideoList, thumbnailurls, videoNameList, this, this);
         mNumbersList.setAdapter(savedVideosCameraAdapter);
         return view;
     }
@@ -87,9 +88,11 @@ public class SavedVideosFragment extends Fragment implements SavedVideosCameraAd
                         String videoUrl = jsonObject.getString("path");
                         String thumbnailUrl = jsonObject.getString("thumbnail");
                         String deleteVideoUrl = jsonObject.getString("delete");
+                        String videoName = jsonObject.getString("video_name");
                         savedVideoList.add(videoUrl);
                         thumbnailurls.add(thumbnailUrl);
                         urlDeleteList.add(deleteVideoUrl);
+                        videoNameList.add(videoName);
                     }
                     savedVideosCameraAdapter.notifyDataSetChanged();
 

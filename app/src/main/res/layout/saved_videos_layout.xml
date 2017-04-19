@@ -24,7 +24,7 @@
                 android:id="@+id/saved_video_name"
                 style="@style/TextAppearance.AppCompat.Title"
                 android:text="Video Name"
-                android:textSize="30sp"
+                android:textSize="15sp"
                 android:textColor="#FFFFFF"
                 android:fontFamily="monospace"
                 android:layout_gravity="center|start"
