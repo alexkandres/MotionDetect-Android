@@ -52,7 +52,7 @@ public class SavedVideosCameraAdapter extends RecyclerView.Adapter<SavedVideosCa
     public void onBindViewHolder(MyViewHolder holder, int position) {
         //display Name in listItemNumberView textview
         //display array item text in textview
-        holder.listItemNumberView.setText(nameList.get(position));
+//        holder.listItemNumberView.setText(nameList.get(position));
         Context context = holder.imageView.getContext();
         //use picasso to display urlimg in imageview
         Picasso.with(context).load(urlList.get(position)).into(holder.imageView);
@@ -75,7 +75,6 @@ public class SavedVideosCameraAdapter extends RecyclerView.Adapter<SavedVideosCa
         CardView cardView;
         ImageView imageView;
         TextView listItemNumberView;
-        TextView urlTextView;
 
         public MyViewHolder(View itemView){
             super(itemView);
@@ -85,7 +84,6 @@ public class SavedVideosCameraAdapter extends RecyclerView.Adapter<SavedVideosCa
             listItemNumberView = (TextView) itemView.findViewById(R.id.saved_video_name);
 
             //TODO set notification time and days from get request
-            urlTextView = (TextView) itemView.findViewById(R.id.url_saved_video);
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
         }

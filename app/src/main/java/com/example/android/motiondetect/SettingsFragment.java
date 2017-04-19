@@ -115,6 +115,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         StringRequest strReq = new StringRequest(Request.Method.PUT, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                Log.i("SettingsFrag", "Success");
                 JSONObject reader;
                 try {
                     reader = new JSONObject(response);
@@ -182,6 +183,8 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         switch(key){
             case "pref_sync":
 
+                Log.i("SettingFrag", "isactive = " + isActive);
+                Log.i("SettingFrag", "ischecked = " + checkBoxPreference.isChecked());
                 //update is_active field for post request
                 isActive = checkBoxPreference.isChecked();
                 sendNotificationPost();

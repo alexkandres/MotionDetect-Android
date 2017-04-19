@@ -1,12 +1,15 @@
 package com.example.android.motiondetect;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
@@ -90,9 +94,97 @@ public class CameraListActivityFragment extends Fragment implements CameraAdapte
         //instantiate adapter with data and both click listeners below
         mAdapter = new CameraAdapter(cameraNameList,urlList , this, this);
         mNumbersList.setAdapter(mAdapter);
+
+        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setView(R.layout.add_camera_dialog);
+                builder.setTitle(R.string.dialog_title);
+
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        //find Camera EditText view
+                        //add text to list of cameras
+                        //Notify adapter of change
+                        EditText editText = (EditText) ((AlertDialog)dialogInterface).findViewById(R.id.cameraNameId);
+                        EditText editUrlText = (EditText) ((AlertDialog)dialogInterface).findViewById(R.id.urlId);
+
+                        //Add name and url to ArrayList
+                        String cameraName = editText.getText().toString();
+                        String urlName = editUrlText.getText().toString();
+
+                        cameraNameList.add(cameraName);
+                        urlList.add(urlName);
+
+                        //send to postNewCamera
+                        postNewCamera(cameraName, urlName);
+
+                        //notify adapter that the data changed
+                        CameraListActivityFragment.mAdapter.notifyDataSetChanged();
+                    }
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(getActivity(), "Cancel Clicked", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+            }
+        });
+
         return view;
     }
 
+    public void postNewCamera(final String cameraName, final String urlName){
+
+        final String url = "http://ec2-54-242-89-175.compute-1.amazonaws.com:8000/api/camera/";
+        StringRequest strReq = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                JSONArray reader;
+                try {
+                    reader = new JSONArray(response);
+                    Log.i("CameraListActivityyyy", "Post request works");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        },
+                new Response.ErrorListener(){
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+//                        hideDialog();
+                        Log.i("Error.Response", "Ahhhh");
+                    }
+                }
+        ){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                map.put("Authorization", LoginActivity.token);
+                return map;
+            }
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("name", cameraName);
+                params.put("address", urlName);
+                return params;
+            }
+        };
+        MySingleton.getInstance(getActivity()).addToRequestQueue(strReq);
+    }
     private void getCamerasRequest(){
 
 //        progressDialog.setMessage("Logging in ...");

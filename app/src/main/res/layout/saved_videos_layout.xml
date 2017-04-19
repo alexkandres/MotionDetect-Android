@@ -7,35 +7,46 @@
     android:layout_height="wrap_content"
     app:cardUseCompatPadding="true">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp">
-        <ImageView
-            android:id="@+id/imageView_saved_video"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginRight="16dp"/>
-        <TextView
-            android:id="@+id/saved_video_name"
-            style="@style/TextAppearance.AppCompat.Title"
-            android:text="vid name"
-            android:textSize="30sp"
-            android:fontFamily="monospace"
-            android:layout_gravity="center|start"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/imageView_saved_video"/>
-        <TextView
-            android:id="@+id/url_saved_video"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="5:00PM - "
-            android:layout_below="@+id/imageView_saved_video"
-            android:layout_alignParentLeft="true"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/imageView_saved_video"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"/>
+            <TextView
+                android:id="@+id/saved_video_name"
+                style="@style/TextAppearance.AppCompat.Title"
+                android:text="Video Name"
+                android:textSize="30sp"
+                android:textColor="#FFFFFF"
+                android:fontFamily="monospace"
+                android:layout_gravity="center|start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"/>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <ImageButton
+                android:src="@drawable/ic_stat_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <ImageButton
+                android:src="@drawable/ic_stat_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+    </LinearLayout>
 
 </android.support.v7.widget.CardView>
