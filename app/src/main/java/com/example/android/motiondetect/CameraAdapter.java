@@ -92,9 +92,9 @@ public class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.MyViewHold
             listItemNumberView = (TextView) itemView.findViewById(R.id.camera_item_number);
 
             //TODO set notification time and days from get request
-            fromTextView = (TextView) itemView.findViewById(R.id.from_textview);
-            toTextView = (TextView) itemView.findViewById(R.id.to_textview);
-            daysTextView = (TextView) itemView.findViewById(R.id.days_textview);
+//            fromTextView = (TextView) itemView.findViewById(R.id.from_textview);
+//            toTextView = (TextView) itemView.findViewById(R.id.to_textview);
+//            daysTextView = (TextView) itemView.findViewById(R.id.days_textview);
             urlTextView = (TextView) itemView.findViewById(R.id.url_textview);
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);

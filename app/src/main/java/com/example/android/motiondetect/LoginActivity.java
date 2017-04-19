@@ -40,6 +40,7 @@ public class LoginActivity extends AppCompatActivity {
     public static String token;
     public static String id;
     public static String username;
+    private String typeParam = "";
 
 
     // UI references.
@@ -59,7 +60,14 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    loginUser(mEmailView.getText().toString(), mPasswordView.getText().toString());
+                    if(mEmailView.getText().toString().contains("@")){
+                        typeParam = "email";
+                        loginUser();
+                    }
+                    else {
+                        typeParam = "username";
+                        loginUser();
+                    }
                     return true;
                 }
                 return false;
@@ -80,7 +88,14 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
                 //TODO Remove auto login
-                loginUser(mEmailView.getText().toString(), mPasswordView.getText().toString());
+                if(mEmailView.getText().toString().contains("@")){
+                    typeParam = "email";
+                    loginUser();
+                }
+                else {
+                    typeParam = "username";
+                    loginUser();
+                }
             }
         });
 
@@ -106,7 +121,7 @@ public class LoginActivity extends AppCompatActivity {
 
         return true;
     }
-    private void loginUser(final String email, final String password){
+    private void loginUser(){
         progressDialog.setMessage("Logging in ...");
         //show dialog
         showDialog();
@@ -163,9 +178,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-//                params.put("email", email);
-                params.put("username", email);
-                params.put("password", password);
+                params.put(typeParam, mEmailView.getText().toString());
+                params.put("password", mPasswordView.getText().toString());
                 return params;
             }
         };
