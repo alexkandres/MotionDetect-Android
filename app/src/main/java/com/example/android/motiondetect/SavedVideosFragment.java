@@ -1,6 +1,7 @@
 package com.example.android.motiondetect;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -122,9 +123,14 @@ public class SavedVideosFragment extends Fragment implements SavedVideosCameraAd
     @Override
     public void onListItemClicked(int indexClicked) {
 
-        //TODO send url
-        Intent intent = new Intent(getActivity(), StreamSavedVideoActivity.class);
-        intent.putExtra("video_url", savedVideoList.get(indexClicked));
+//        Intent intent = new Intent(getActivity(), StreamSavedVideoActivity.class);
+//        intent.putExtra("video_url", savedVideoList.get(indexClicked));
+//        startActivity(intent);
+
+        //send to ACTION_
+        Uri newVideoPath = Uri.parse(savedVideoList.get(indexClicked));
+        Intent intent = new Intent(Intent.ACTION_VIEW, newVideoPath);
+        intent.setDataAndType(newVideoPath, "video/mp4");
         startActivity(intent);
     }
 
