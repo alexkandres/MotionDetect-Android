@@ -7,12 +7,12 @@
         android:key="notification_category_key">
 
         <CheckBoxPreference
-            android:key="pref_sync"
+            android:key="checkbox_key"
             android:title="Notification Enables"
             android:defaultValue="true" />
 
         <EditTextPreference
-            android:dependency="pref_sync"
+            android:dependency="checkbox_key"
             android:key="key1"
             android:title="Email"
             android:summary="Email Address to notify"
@@ -23,7 +23,7 @@
             android:layout_height="wrap_content" />
 
         <Preference
-            android:dependency="pref_sync"
+            android:dependency="checkbox_key"
             android:key="datePicker"
             android:title="Date"
             android:summary="Notification Days and Times"

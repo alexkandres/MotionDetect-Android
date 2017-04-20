@@ -65,6 +65,13 @@ public class SavedVideosCameraAdapter extends RecyclerView.Adapter<SavedVideosCa
     public int getItemCount() {
         return nameList.size();
     }
+
+    public void clear(){
+        nameList.clear();
+        urlList.clear();
+        videoNameList.clear();
+    }
+
     public interface ListItemClickListener{
         void onListItemClicked(int indexClicked);
     }

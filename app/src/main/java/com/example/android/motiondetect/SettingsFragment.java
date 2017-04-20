@@ -34,14 +34,14 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     private String[] times = new String[2];
     private boolean days[] = new boolean[7];
     int requestCode = 1;
-
+    final String checkKey = "checkbox_key";
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         addPreferencesFromResource(R.xml.activity_seetings);
 
-        checkBoxPreference = (CheckBoxPreference) findPreference("pref_sync");
+        checkBoxPreference = (CheckBoxPreference) findPreference(checkKey);
         setNotificationTimes();
 
         //Set on change listener to Shared preference
@@ -67,7 +67,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                     if(isActive){
                         checkBoxPreference.setChecked(true);
                     }
-                    else {
+                    else if(!isActive){
                         checkBoxPreference.setChecked(false);
                     }
                     times[0] = reader.getString("time_from");
@@ -144,6 +144,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
+
                 params.put("is_active", (isActive)? "1": "0");
                 params.put("time_from", times[0]);
                 params.put("time_to", times[1]);
@@ -164,8 +165,8 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         String[] arrHourMin = times[0].split(":");
         String[] arrHourMin2 = times[1].split(":");
 
-        //display format h = 12hr clk, mm = minute, a = am/pm
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("h:mma");
+        //display format H = 24hr clk, mm = minute, a = am/pm
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("H:mma");
         Time timefrom = new Time(Integer.parseInt(arrHourMin[0]), Integer.parseInt(arrHourMin[1]), 0);
         Time timeto = new Time(Integer.parseInt(arrHourMin2[0]), Integer.parseInt(arrHourMin2[1]), 0);
 
@@ -181,7 +182,9 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 
         switch(key){
-            case "pref_sync":
+
+            //check if clicked
+            case checkKey:
 
                 Log.i("SettingFrag", "isactive = " + isActive);
                 Log.i("SettingFrag", "ischecked = " + checkBoxPreference.isChecked());

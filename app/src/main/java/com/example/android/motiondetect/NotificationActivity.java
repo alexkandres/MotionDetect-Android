@@ -207,6 +207,7 @@ public class NotificationActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
+                params.put("is_active", "1");
                 params.put("time_from", times[0]);
                 params.put("time_to", times[1]);
                 params.put("monday", (days[0])? "1": "0");
